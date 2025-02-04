@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import useSWR from 'swr'
+import Router from './routes/Router'
+import { fetcher } from './utils'
 
-function App() {
-  const [message, setMessage] = useState("Loading...");
+const App = () => {
+  const url = `${process.env.REACT_APP_API_URL}/hello`
+  const { data, error } = useSWR(url, fetcher)
 
-  useEffect(() => {
-    fetch("http://localhost:3000/hello")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.status))
-      .catch(() => setMessage("API error"));
-  }, []);
+  if (error) return <div>An error has occurred.</div>
+  if (!data) return <div>Loading...</div>
 
-  return <div>Backend Status: {message}</div>;
+  return (
+    <>
+      Backend Status: {data.status}
+      <Router />
+    </>
+  )
 }
 
-export default App;
+export default App
