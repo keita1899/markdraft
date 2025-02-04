@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import Router from './routes/Router'
 
-function App() {
+const App = () => {
   const [message, setMessage] = useState('Loading...')
 
   useEffect(() => {
@@ -10,7 +11,12 @@ function App() {
       .catch(() => setMessage('API error'))
   }, [])
 
-  return <div>Backend Status: {message}</div>
+  return (
+    <>
+      Backend Status: {message}
+      <Router />
+    </>
+  )
 }
 
 export default App
