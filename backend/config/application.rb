@@ -32,5 +32,8 @@ module Backend
                        helper_specs: false,
                        request_specs: true
     end
+
+    config.time_zone = "Tokyo"
+    config.active_record.default_timezone = :local
   end
 end
