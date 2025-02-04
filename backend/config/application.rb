@@ -23,5 +23,20 @@ module Backend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.generators do |g|
+      g.helper false
+      g.test_framework :rspec,
+                       system_specs: false,
+                       view_specs: false,
+                       helper_specs: false,
+                       request_specs: true
+    end
+
+    config.time_zone = "Tokyo"
+    config.active_record.default_timezone = :local
+
+    config.i18n.default_locale = :ja
+    config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}").to_s]
   end
 end
