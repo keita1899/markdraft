@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16
+    platform: linux/arm64
+    ports:
+      - "5432:5432"
+    volumes:
+      - 'postgres_data:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'postgres'
+  backend:
+    build:
+      context: ./backend
+    command: bash -c "rails s -b '0.0.0.0'"
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 3000:3000
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'postgres'
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/frontend
+    command: sh -c "PORT=3001 yarn start"
+    ports:
+      - 3001:3001
+volumes:
+  postgres_data:
