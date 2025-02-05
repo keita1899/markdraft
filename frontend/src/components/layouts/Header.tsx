@@ -37,7 +37,12 @@ export const Header = () => {
         </Typography>
 
         {isMobile && (
-          <IconButton color="inherit" edge="end" onClick={handleDrawerToggle}>
+          <IconButton
+            color="inherit"
+            edge="end"
+            onClick={handleDrawerToggle}
+            aria-label="メニューを開く"
+          >
             <MenuIcon />
           </IconButton>
         )}
@@ -59,7 +64,7 @@ export const Header = () => {
       </Toolbar>
 
       <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle}>
-        <Box sx={{ width: 250 }} role="presentation">
+        <Box sx={{ width: 250 }} role="navigation" aria-label="メインメニュー">
           <List>
             <ListItem component={Link} to="/signup">
               <ListItemText primary="新規登録" />
