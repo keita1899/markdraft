@@ -2,16 +2,16 @@ import { Button, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import TextAlignContainer from '../components/utilities/TextAlignContainer'
 
-const NotFound = () => (
+const InternalServerError = () => (
   <TextAlignContainer align="center" mt={8}>
     <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
-      404
+      500
     </Typography>
     <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
-      Not Found
+      Internal Server Error
     </Typography>
     <Typography variant="h5" sx={{ mt: 2 }}>
-      ページが見つかりません
+      サーバーに問題が発生しました。後ほどもう一度お試しください。
     </Typography>
     <Button
       variant="contained"
@@ -25,4 +25,4 @@ const NotFound = () => (
   </TextAlignContainer>
 )
 
-export default NotFound
+export default InternalServerError
