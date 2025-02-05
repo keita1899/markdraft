@@ -1,4 +1,8 @@
+import { Box } from '@mui/material'
 import useSWR from 'swr'
+import { Footer } from './components/layouts/Footer'
+import { Header } from './components/layouts/Header'
+import { FlexContainer } from './components/utilities/FlexContainer'
 import Router from './routes/Router'
 import { fetcher } from './utils'
 
@@ -10,10 +14,14 @@ const App = () => {
   if (!data) return <div>Loading...</div>
 
   return (
-    <>
-      Backend Status: {data.status}
-      <Router />
-    </>
+    <FlexContainer flexDirection="column" minHeight="100vh">
+      <Header />
+      <Box flex={1} px={1}>
+        Backend Status: {data.status}
+        <Router />
+      </Box>
+      <Footer />
+    </FlexContainer>
   )
 }
 
