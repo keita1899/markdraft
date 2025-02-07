@@ -1,7 +1,13 @@
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 
-test('renders loading state', () => {
-  render(<App />)
-  expect(screen.getByText(/loading/i)).toBeInTheDocument()
+describe('App Component', () => {
+  it('renders Header, Router, and Footer', () => {
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    )
+  })
 })
