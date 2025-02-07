@@ -10,7 +10,7 @@ export const signupValidation = (watch: UseFormWatch<SignupFormValues>) => ({
   email: {
     required: 'メールアドレスは必須です',
     pattern: {
-      value: /^[\w\-._]+@[\w\-._]+\.[A-Za-z]+$/,
+      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]+$/,
       message: '無効なメールアドレスです',
     },
   },
