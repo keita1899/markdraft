@@ -38,7 +38,7 @@ gem "rack-cors"
 
 gem "rails-i18n", "~> 7.0.0"
 
-gem "jwt"
+gem "jwt", "~> 2.3.0"
 
 gem "active_model_serializers"
 
