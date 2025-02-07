@@ -18,6 +18,7 @@ export const SubmitButton = ({
     color="primary"
     fullWidth
     disabled={disabled}
+    aria-label={text}
     sx={{
       paddingY: 1,
     }}
