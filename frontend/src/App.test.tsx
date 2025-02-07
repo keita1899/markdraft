@@ -7,7 +7,7 @@ describe('App Component', () => {
     render(
       <BrowserRouter>
         <App />
-      </BrowserRouter>
+      </BrowserRouter>,
     )
   })
 })
