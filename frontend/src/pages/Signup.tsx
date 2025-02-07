@@ -67,7 +67,7 @@ const Signup = () => {
       if (error.response?.data.errors) {
         openSnackbar(error.response.data.errors.join(', '), 'error')
       }
-      console.error(error.response)
+      console.error('Registration failed:', error.message)
     } finally {
       setIsLoading(false)
     }
