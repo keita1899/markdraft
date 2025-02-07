@@ -7,6 +7,7 @@ import { ErrorMessage } from '../components/form/ErrorMessage'
 import { Input } from '../components/form/Input'
 import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
+import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
 import { signupValidation } from '../validations/signupValidation'
 
@@ -35,7 +36,7 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setIsLoading(true)
-    const url = `${process.env.REACT_APP_API_URL}/api/v1/registrations`
+    const url = API_ENDPOINTS.signup
     const headers = {
       'Content-Type': 'application/json',
     }
