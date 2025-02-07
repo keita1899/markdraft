@@ -57,7 +57,11 @@ const Signup = () => {
           headers: headers,
         })
 
-      localStorage.setItem('accessToken', res.data.token)
+      const tokenData = {
+        token: res.data.token,
+        expiry: Date.now() + 24 * 60 * 60 * 1000,
+      }
+      localStorage.setItem('accessToken', JSON.stringify(tokenData))
       openSnackbar(res.data.message, 'success')
       navigate('/drafts')
     } catch (e) {
