@@ -30,7 +30,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set RAILS_MASTER_KEY and JWT secret_key
-        run: echo "RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}" >> $GITHUB_ENV
+        run: |
+          echo "RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
