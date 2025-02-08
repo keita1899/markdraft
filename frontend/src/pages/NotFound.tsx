@@ -1,6 +1,6 @@
 import { Button, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import TextAlignContainer from '../components/utilities/TextAlignContainer'
+import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 
 const NotFound = () => (
   <TextAlignContainer align="center" mt={8}>

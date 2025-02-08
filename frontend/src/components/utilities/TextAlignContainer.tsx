@@ -4,9 +4,7 @@ type TextAlignContainerProps = {
   align?: 'left' | 'center' | 'right' | 'justify'
 } & BoxProps
 
-const TextAlignContainer = ({
+export const TextAlignContainer = ({
   align = 'left',
   ...props
 }: TextAlignContainerProps) => <Box {...props} sx={{ textAlign: align }} />
-
-export default TextAlignContainer
