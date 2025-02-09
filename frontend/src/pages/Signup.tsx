@@ -126,7 +126,7 @@ const Signup = () => {
             すでにアカウントをお持ちですか?
             <MuiLink
               component={Link}
-              to="/login"
+              to="/signin"
               color="primary"
               marginLeft={2}
             >
