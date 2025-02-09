@@ -9,15 +9,14 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
-import { signupValidation } from '../validations/signupValidation'
+import { signinValidation } from '../validations/signinValidation'
 
-type SignupFormData = {
+type SigninFormData = {
   email: string
   password: string
-  confirmPassword: string
 }
 
-const Signup = () => {
+const Signin = () => {
   const navigate = useNavigate()
   const { openSnackbar } = useSnackbar()
   const [isLoading, setIsLoading] = useState(false)
@@ -26,63 +25,54 @@ const Signup = () => {
     control,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
-  } = useForm<SignupFormData>({
-    defaultValues: { email: '', password: '', confirmPassword: '' },
+  } = useForm<SigninFormData>({
+    defaultValues: { email: '', password: '' },
     mode: 'onChange',
   })
 
-  const validationRules = signupValidation(watch)
+  const validationRules = signinValidation
 
-  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
+  const onSubmit: SubmitHandler<SigninFormData> = async (data) => {
     setIsLoading(true)
-    const url = API_ENDPOINTS.signup
+    const url = API_ENDPOINTS.signin
     const headers = {
       'Content-Type': 'application/json',
     }
-    const requestData = {
-      user: {
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.confirmPassword,
-      },
-    }
 
-    try {
-      const res: AxiosResponse<{ message: string; token: string }> =
-        await axios({
-          method: 'POST',
-          url: url,
-          data: requestData,
-          headers: headers,
-        })
+    axios({ method: 'POST', url: url, data: data, headers: headers })
+      .then((res: AxiosResponse<{ message: string; token: string }>) => {
+        const tokenData = {
+          token: res.data.token,
+          expiry: Date.now() + 24 * 60 * 60 * 1000,
+        }
+        localStorage.setItem('accessToken', JSON.stringify(tokenData))
 
-      const tokenData = {
-        token: res.data.token,
-        expiry: Date.now() + 24 * 60 * 60 * 1000,
-      }
-      localStorage.setItem('accessToken', JSON.stringify(tokenData))
-      openSnackbar(res.data.message, 'success')
-      navigate('/drafts')
-    } catch (e) {
-      const error = e as AxiosError<{ message: string; errors: string[] }>
-      const errorMessage =
-        error.response?.data.message ?? '予期しないエラーが発生しました'
-      openSnackbar(errorMessage, 'error')
-      if (error.response?.data.errors) {
-        openSnackbar(error.response.data.errors.join(', '), 'error')
-      }
-      console.error('Registration failed:', error.message)
-    } finally {
-      setIsLoading(false)
-    }
+        openSnackbar(res.data.message, 'success')
+
+        navigate('/drafts')
+      })
+      .catch((error: AxiosError<{ message: string; errors: string[] }>) => {
+        const errorMessage =
+          error.response?.data.message ?? '予期しないエラーが発生しました'
+
+        openSnackbar(errorMessage, 'error')
+
+        if (error.response?.data.errors) {
+          openSnackbar(error.response.data.errors.join(', '), 'error')
+        }
+
+        console.error('Signin failed:', error.message)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
     <Container maxWidth="sm">
       <Box marginTop={6}>
         <TextAlignContainer align="center">
-          <Typography variant="h4">新規登録</Typography>
+          <Typography variant="h4">ログイン</Typography>
         </TextAlignContainer>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
@@ -102,20 +92,9 @@ const Signup = () => {
             error={!!errors.password}
           />
           {errors.password && <ErrorMessage error={errors.password?.message} />}
-          <Input
-            name="confirmPassword"
-            label="パスワード確認"
-            control={control}
-            type="password"
-            rules={validationRules.confirmPassword}
-            error={!!errors.confirmPassword}
-          />
-          {errors.confirmPassword && (
-            <ErrorMessage error={errors.confirmPassword?.message} />
-          )}
           <Box mt={3}>
             <SubmitButton
-              text="登録"
+              text="ログイン"
               isLoading={isLoading}
               disabled={!isValid}
             />
@@ -123,14 +102,14 @@ const Signup = () => {
         </form>
         <TextAlignContainer align="center" mt={4}>
           <Typography variant="body2">
-            すでにアカウントをお持ちですか?
+            アカウントをお持ちでない場合は
             <MuiLink
               component={Link}
-              to="/signin"
+              to="/signup"
               color="primary"
               marginLeft={2}
             >
-              ログイン
+              新規登録
             </MuiLink>
           </Typography>
         </TextAlignContainer>
@@ -139,4 +118,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Signin

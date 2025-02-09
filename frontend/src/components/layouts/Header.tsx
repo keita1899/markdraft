@@ -56,7 +56,7 @@ export const Header = () => {
             >
               新規登録
             </Typography>
-            <Typography component={Link} to="/login" sx={{ color: 'inherit' }}>
+            <Typography component={Link} to="/signin" sx={{ color: 'inherit' }}>
               ログイン
             </Typography>
           </Box>
@@ -69,7 +69,7 @@ export const Header = () => {
             <ListItem component={Link} to="/signup">
               <ListItemText primary="新規登録" />
             </ListItem>
-            <ListItem component={Link} to="/login">
+            <ListItem component={Link} to="/signin">
               <ListItemText primary="ログイン" />
             </ListItem>
           </List>

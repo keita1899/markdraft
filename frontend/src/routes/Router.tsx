@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home'
 import InternalServerError from '../pages/InternalServerError'
 import NotFound from '../pages/NotFound'
+import Signin from '../pages/Signin'
 import Signup from '../pages/Signup'
 
 const Router: React.FC = () => {
@@ -10,6 +11,7 @@ const Router: React.FC = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/signin" element={<Signin />} />
       <Route path="/500" element={<InternalServerError />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
