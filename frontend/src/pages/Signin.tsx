@@ -67,8 +67,11 @@ const Signin = () => {
         navigate('/drafts')
       })
       .catch((e: AxiosError<{ message: string }>) => {
-        console.log(e.message)
-        openSnackbar('ログインが失敗しました', 'error')
+        const errorMessage =
+          e.response?.status === 401
+            ? 'メールアドレスまたはパスワードが正しくありません'
+            : 'ログインに失敗しました'
+        openSnackbar(errorMessage, 'error')
       })
       .finally(() => {
         setIsLoading(false)
