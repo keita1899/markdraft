@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   get "/hello", to: "hello#index"
   namespace :api do
     namespace :v1 do
-      resources :registrations, only: %i[create]
-      resources :auth, only: %i[create]
+      mount_devise_token_auth_for "User", at: "auth"
     end
   end
 end
