@@ -10,6 +10,7 @@ import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
 import { useAuth } from '../hooks/useAuth'
+import { saveAuthStorage } from '../utils/authStorage'
 import { signinValidation } from '../validations/signinValidation'
 
 type SigninFormData = {
@@ -48,9 +49,11 @@ const Signin = () => {
       headers: headers,
     })
       .then((res: AxiosResponse) => {
-        localStorage.setItem('access-token', res.headers['access-token'])
-        localStorage.setItem('client', res.headers['client'])
-        localStorage.setItem('uid', res.headers['uid'])
+        saveAuthStorage(
+          res.headers['access-token'],
+          res.headers['client'],
+          res.headers['uid'],
+        )
         setCurrentUser({
           ...currentUser,
           isFetched: false,

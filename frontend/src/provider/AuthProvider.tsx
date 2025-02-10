@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 import { ReactNode, useEffect, useState } from 'react'
 import { API_ENDPOINTS } from '../config/api'
 import { AuthContext } from '../context/AuthContext'
+import { clearAuthStorage } from '../utils/authStorage'
 
 type AuthProviderProps = {
   children: ReactNode
@@ -47,7 +48,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           })
         })
         .catch((e: AxiosError<{ error: string }>) => {
-          console.log(e.message)
+          if (e.response?.status === 401) {
+            clearAuthStorage()
+          }
           setCurrentUser({
             ...currentUser,
             isFetched: true,
