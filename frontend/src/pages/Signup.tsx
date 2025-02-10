@@ -40,11 +40,18 @@ const Signup = () => {
     const headers = {
       'Content-Type': 'application/json',
     }
+    const { confirmPassword, ...formData } = data
+    const requestData = {
+      registration: {
+        ...formData,
+        password_confirmation: confirmPassword,
+      },
+    }
 
     await axios({
       method: 'POST',
       url: url,
-      data: { ...data },
+      data: requestData,
       headers: headers,
     })
       .then((res: AxiosResponse) => {
