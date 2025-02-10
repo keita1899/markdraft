@@ -14,8 +14,10 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 export const Header = () => {
+  const { currentUser } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -49,16 +51,30 @@ export const Header = () => {
 
         {!isMobile && (
           <Box sx={{ display: 'flex' }}>
-            <Typography
-              component={Link}
-              to="/signup"
-              sx={{ color: 'inherit', marginRight: 2 }}
-            >
-              新規登録
-            </Typography>
-            <Typography component={Link} to="/signin" sx={{ color: 'inherit' }}>
-              ログイン
-            </Typography>
+            {currentUser.isSignedIn ? (
+              <>
+                <Typography sx={{ cursor: 'pointer', color: 'inherit' }}>
+                  ログアウト
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography
+                  component={Link}
+                  to="/signup"
+                  sx={{ color: 'inherit', marginRight: 2 }}
+                >
+                  新規登録
+                </Typography>
+                <Typography
+                  component={Link}
+                  to="/signin"
+                  sx={{ color: 'inherit' }}
+                >
+                  ログイン
+                </Typography>
+              </>
+            )}
           </Box>
         )}
       </Toolbar>
@@ -66,12 +82,22 @@ export const Header = () => {
       <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle}>
         <Box sx={{ width: 250 }} role="navigation" aria-label="メインメニュー">
           <List>
-            <ListItem component={Link} to="/signup">
-              <ListItemText primary="新規登録" />
-            </ListItem>
-            <ListItem component={Link} to="/signin">
-              <ListItemText primary="ログイン" />
-            </ListItem>
+            {currentUser.isSignedIn ? (
+              <>
+                <ListItem>
+                  <ListItemText primary="ログアウト" />
+                </ListItem>
+              </>
+            ) : (
+              <>
+                <ListItem component={Link} to="/signup">
+                  <ListItemText primary="新規登録" />
+                </ListItem>
+                <ListItem component={Link} to="/signin">
+                  <ListItemText primary="ログイン" />
+                </ListItem>
+              </>
+            )}
           </List>
         </Box>
       </Drawer>
