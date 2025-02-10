@@ -40,42 +40,25 @@ const Signup = () => {
     const headers = {
       'Content-Type': 'application/json',
     }
-    const requestData = {
-      user: {
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.confirmPassword,
-      },
-    }
 
-    try {
-      const res: AxiosResponse<{ message: string; token: string }> =
-        await axios({
-          method: 'POST',
-          url: url,
-          data: requestData,
-          headers: headers,
-        })
-
-      const tokenData = {
-        token: res.data.token,
-        expiry: Date.now() + 24 * 60 * 60 * 1000,
-      }
-      localStorage.setItem('accessToken', JSON.stringify(tokenData))
-      openSnackbar(res.data.message, 'success')
-      navigate('/drafts')
-    } catch (e) {
-      const error = e as AxiosError<{ message: string; errors: string[] }>
-      const errorMessage =
-        error.response?.data.message ?? '予期しないエラーが発生しました'
-      openSnackbar(errorMessage, 'error')
-      if (error.response?.data.errors) {
-        openSnackbar(error.response.data.errors.join(', '), 'error')
-      }
-      console.error('Registration failed:', error.message)
-    } finally {
-      setIsLoading(false)
-    }
+    await axios({
+      method: 'POST',
+      url: url,
+      data: { ...data },
+      headers: headers,
+    })
+      .then((res: AxiosResponse) => {
+        localStorage.setItem('access-token', res.headers['access-token'] || '')
+        localStorage.setItem('client', res.headers['client'] || '')
+        localStorage.setItem('uid', res.headers['uid'] || '')
+        openSnackbar('新規登録に成功しました', 'success')
+        navigate('/drafts')
+      })
+      .catch((e: AxiosError<{ errors: string }>) => {
+        console.log(e.message)
+        openSnackbar('新規登録に失敗しました', 'error')
+        setIsLoading(false)
+      })
   }
 
   return (

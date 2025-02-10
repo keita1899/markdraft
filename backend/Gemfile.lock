@@ -71,6 +71,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
     bcrypt (3.1.20)
     bootsnap (1.18.3)
@@ -81,12 +83,26 @@ GEM
       uniform_notifier (~> 1.11)
     case_transform (0.2)
       activesupport
+    childprocess (5.1.0)
+      logger (~> 1.5)
     concurrent-ruby (1.2.3)
     crass (1.0.6)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    devise (4.9.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+    devise-i18n (1.12.1)
+      devise (>= 4.9.0)
+    devise_token_auth (1.2.5)
+      bcrypt (~> 3.0)
+      devise (> 3.5.2, < 5)
+      rails (>= 4.2.0, < 8.1)
     diff-lcs (1.5.1)
     dotenv (3.1.7)
     dotenv-rails (3.1.7)
@@ -112,6 +128,18 @@ GEM
     jsonapi-renderer (0.2.2)
     jwt (2.3.0)
     language_server-protocol (3.17.0.4)
+    launchy (3.1.0)
+      addressable (~> 2.8)
+      childprocess (~> 5.0)
+      logger (~> 1.6)
+    letter_opener (1.10.0)
+      launchy (>= 2.2, < 4)
+    letter_opener_web (3.0.0)
+      actionmailer (>= 6.1)
+      letter_opener (~> 1.9)
+      railties (>= 6.1)
+      rexml
+    logger (1.6.5)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -137,6 +165,7 @@ GEM
     nio4r (2.7.1)
     nokogiri (1.16.4-aarch64-linux)
       racc (~> 1.4)
+    orm_adapter (0.5.0)
     parallel (1.26.3)
     parser (3.3.7.0)
       ast (~> 2.4.1)
@@ -144,6 +173,7 @@ GEM
     pg (1.5.6)
     psych (5.1.2)
       stringio
+    public_suffix (6.0.1)
     puma (5.6.8)
       nio4r (~> 2.0)
     racc (1.7.3)
@@ -190,6 +220,10 @@ GEM
     regexp_parser (2.10.0)
     reline (0.5.3)
       io-console (~> 0.5)
+    responders (3.1.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
+    rexml (3.4.0)
     rspec-core (3.13.2)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -244,6 +278,8 @@ GEM
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
     uniform_notifier (1.16.0)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -258,10 +294,14 @@ DEPENDENCIES
   bootsnap
   bullet
   debug
+  devise
+  devise-i18n
+  devise_token_auth
   dotenv-rails
   factory_bot_rails
   faker
   jwt (~> 2.3.0)
+  letter_opener_web
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors

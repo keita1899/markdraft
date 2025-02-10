@@ -15,9 +15,9 @@ RSpec.describe User, type: :model do
         expect(user).to be_valid
       end
 
-      it "パスワードが72文字かつ英数字が含まれる場合成功する" do
-        user.password = "a1" * 36
-        user.password_confirmation = "a1" * 36
+      it "パスワードが128文字かつ英数字が含まれる場合成功する" do
+        user.password = "a1" * 64
+        user.password_confirmation = "a1" * 64
         expect(user).to be_valid
       end
 
@@ -81,10 +81,10 @@ RSpec.describe User, type: :model do
         expect(user.errors[:password]).to include("は8文字以上で入力してください")
       end
 
-      it "パスワードが73文字以上だと失敗する" do
-        user.password = "#{"a" * 72}1"
+      it "パスワードが129文字以上だと失敗する" do
+        user.password = "#{"a" * 128}1"
         expect(user).to be_invalid
-        expect(user.errors[:password]).to include("は72文字以内で入力してください")
+        expect(user.errors[:password]).to include("は128文字以内で入力してください")
       end
 
       it "パスワードの形式が間違っていると失敗する" do
