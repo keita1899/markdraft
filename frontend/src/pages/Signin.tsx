@@ -9,6 +9,7 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
+import { useAuth } from '../hooks/useAuth'
 import { signinValidation } from '../validations/signinValidation'
 
 type SigninFormData = {
@@ -19,6 +20,7 @@ type SigninFormData = {
 const Signin = () => {
   const navigate = useNavigate()
   const { openSnackbar } = useSnackbar()
+  const { currentUser, setCurrentUser } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -39,29 +41,27 @@ const Signin = () => {
       'Content-Type': 'application/json',
     }
 
-    axios({ method: 'POST', url: url, data: data, headers: headers })
-      .then((res: AxiosResponse<{ message: string; token: string }>) => {
-        const tokenData = {
-          token: res.data.token,
-          expiry: Date.now() + 24 * 60 * 60 * 1000,
-        }
-        localStorage.setItem('accessToken', JSON.stringify(tokenData))
-
-        openSnackbar(res.data.message, 'success')
+    axios({
+      method: 'POST',
+      url: url,
+      data: data,
+      headers: headers,
+    })
+      .then((res: AxiosResponse) => {
+        localStorage.setItem('access-token', res.headers['access-token'])
+        localStorage.setItem('client', res.headers['client'])
+        localStorage.setItem('uid', res.headers['uid'])
+        setCurrentUser({
+          ...currentUser,
+          isFetched: false,
+        })
+        openSnackbar('ログインが成功しました', 'success')
 
         navigate('/drafts')
       })
-      .catch((error: AxiosError<{ message: string; errors: string[] }>) => {
-        const errorMessage =
-          error.response?.data.message ?? '予期しないエラーが発生しました'
-
-        openSnackbar(errorMessage, 'error')
-
-        if (error.response?.data.errors) {
-          openSnackbar(error.response.data.errors.join(', '), 'error')
-        }
-
-        console.error('Signin failed:', error.message)
+      .catch((e: AxiosError<{ message: string }>) => {
+        console.log(e.message)
+        openSnackbar('ログインが失敗しました', 'error')
       })
       .finally(() => {
         setIsLoading(false)
