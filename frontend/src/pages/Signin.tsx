@@ -49,11 +49,15 @@ const Signin = () => {
       headers: headers,
     })
       .then((res: AxiosResponse) => {
-        saveAuthStorage(
-          res.headers['access-token'],
-          res.headers['client'],
-          res.headers['uid'],
-        )
+        const accessToken = res.headers['access-token']
+        const client = res.headers['client']
+        const uid = res.headers['uid']
+
+        if (!accessToken || !client || !uid) {
+          throw new Error('レスポンスに認証ヘッダーがありません')
+        }
+
+        saveAuthStorage(accessToken, client, uid)
         setCurrentUser({
           ...currentUser,
           isFetched: false,
