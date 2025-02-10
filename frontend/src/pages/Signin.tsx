@@ -9,6 +9,8 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
+import { useAuth } from '../hooks/useAuth'
+import { saveAuthStorage } from '../utils/authStorage'
 import { signinValidation } from '../validations/signinValidation'
 
 type SigninFormData = {
@@ -19,6 +21,7 @@ type SigninFormData = {
 const Signin = () => {
   const navigate = useNavigate()
   const { openSnackbar } = useSnackbar()
+  const { currentUser, setCurrentUser } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -39,29 +42,36 @@ const Signin = () => {
       'Content-Type': 'application/json',
     }
 
-    axios({ method: 'POST', url: url, data: data, headers: headers })
-      .then((res: AxiosResponse<{ message: string; token: string }>) => {
-        const tokenData = {
-          token: res.data.token,
-          expiry: Date.now() + 24 * 60 * 60 * 1000,
-        }
-        localStorage.setItem('accessToken', JSON.stringify(tokenData))
+    axios({
+      method: 'POST',
+      url: url,
+      data: data,
+      headers: headers,
+    })
+      .then((res: AxiosResponse) => {
+        const accessToken = res.headers['access-token']
+        const client = res.headers['client']
+        const uid = res.headers['uid']
 
-        openSnackbar(res.data.message, 'success')
+        if (!accessToken || !client || !uid) {
+          throw new Error('レスポンスに認証ヘッダーがありません')
+        }
+
+        saveAuthStorage(accessToken, client, uid)
+        setCurrentUser({
+          ...currentUser,
+          isFetched: false,
+        })
+        openSnackbar('ログインが成功しました', 'success')
 
         navigate('/drafts')
       })
-      .catch((error: AxiosError<{ message: string; errors: string[] }>) => {
+      .catch((e: AxiosError<{ message: string }>) => {
         const errorMessage =
-          error.response?.data.message ?? '予期しないエラーが発生しました'
-
+          e.response?.status === 401
+            ? 'メールアドレスまたはパスワードが正しくありません'
+            : 'ログインに失敗しました'
         openSnackbar(errorMessage, 'error')
-
-        if (error.response?.data.errors) {
-          openSnackbar(error.response.data.errors.join(', '), 'error')
-        }
-
-        console.error('Signin failed:', error.message)
       })
       .finally(() => {
         setIsLoading(false)

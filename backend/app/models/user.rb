@@ -11,6 +11,6 @@ class User < ApplicationRecord
 
   validates :email, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP, message: I18n.t("errors.messages.invalid_email") }
   validates :password,
-            format: { with: PASSWORD_COMPLEXITY_REGEX, message: I18n.t("errors.messages.password_complexity") }
-  validates :password_confirmation, presence: true
+            format: { with: PASSWORD_COMPLEXITY_REGEX, message: I18n.t("errors.messages.password_complexity") }, if: :new_record?
+  validates :password_confirmation, presence: true, if: :new_record?
 end

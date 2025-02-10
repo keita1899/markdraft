@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './styles/index.css'
+import { AuthProvider } from './provider/AuthProvider'
 import { SnackbarProvider } from './provider/SnackbarProvider'
 import reportWebVitals from './reportWebVitals'
 import theme from './styles/theme'
@@ -15,7 +16,9 @@ root.render(
       <CssBaseline />
       <BrowserRouter>
         <SnackbarProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </SnackbarProvider>
       </BrowserRouter>
     </ThemeProvider>

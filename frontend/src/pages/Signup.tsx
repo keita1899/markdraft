@@ -9,6 +9,7 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
+import { saveAuthStorage } from '../utils/authStorage'
 import { signupValidation } from '../validations/signupValidation'
 
 type SignupFormData = {
@@ -40,17 +41,26 @@ const Signup = () => {
     const headers = {
       'Content-Type': 'application/json',
     }
+    const { confirmPassword, ...formData } = data
+    const requestData = {
+      registration: {
+        ...formData,
+        password_confirmation: confirmPassword,
+      },
+    }
 
     await axios({
       method: 'POST',
       url: url,
-      data: { ...data },
+      data: requestData,
       headers: headers,
     })
       .then((res: AxiosResponse) => {
-        localStorage.setItem('access-token', res.headers['access-token'] || '')
-        localStorage.setItem('client', res.headers['client'] || '')
-        localStorage.setItem('uid', res.headers['uid'] || '')
+        saveAuthStorage(
+          res.headers['access-token'],
+          res.headers['client'],
+          res.headers['uid'],
+        )
         openSnackbar('新規登録に成功しました', 'success')
         navigate('/drafts')
       })

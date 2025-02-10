@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Auth", type: :request do
+RSpec.describe "Api::V1::Auth::Registrations", type: :request do
   describe "POST /api/v1/auth" do
     let(:valid_params) do
       {
@@ -28,7 +28,7 @@ RSpec.describe "Auth", type: :request do
 
     context "ログインしていない場合" do
       context "入力するパラメータが正しい場合" do
-        it "リクエストが成功する" do
+        it "新規登録が成功する" do
           expect {
             post "/api/v1/auth", params: valid_params, as: :json
           }.to change { User.count }.by(1)
@@ -41,7 +41,7 @@ RSpec.describe "Auth", type: :request do
       end
 
       context "入力するパラメータが間違っている場合" do
-        it "リクエストが失敗する" do
+        it "unprocessable_entity エラーが返る" do
           post "/api/v1/auth", params: invalid_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)
@@ -51,7 +51,7 @@ RSpec.describe "Auth", type: :request do
       context "メールアドレスが重複している場合" do
         before { create(:user, email: "duplicate@example.com") }
 
-        it "リクエストが失敗する" do
+        it "unprocessable_entity エラーが返る" do
           post "/api/v1/auth", params: duplicate_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)
