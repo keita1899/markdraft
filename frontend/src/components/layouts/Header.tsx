@@ -53,7 +53,11 @@ export const Header = () => {
           <Box sx={{ display: 'flex' }}>
             {currentUser.isSignedIn ? (
               <>
-                <Typography sx={{ cursor: 'pointer', color: 'inherit' }}>
+                <Typography
+                  component={Link}
+                  to="/signout"
+                  sx={{ cursor: 'pointer', color: 'inherit' }}
+                >
                   ログアウト
                 </Typography>
               </>
@@ -84,7 +88,7 @@ export const Header = () => {
           <List>
             {currentUser.isSignedIn ? (
               <>
-                <ListItem>
+                <ListItem component={Link} to="/signout">
                   <ListItemText primary="ログアウト" />
                 </ListItem>
               </>
