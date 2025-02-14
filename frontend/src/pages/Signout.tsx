@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useCurrentUserState } from '../hooks/useCurrentUser'
 import { clearAuthStorage } from '../utils/authStorage'
 
 const Signout = () => {
   const navigate = useNavigate()
-  const { setCurrentUser } = useAuth()
+  const [, setCurrentUser] = useCurrentUserState()
   useEffect(() => {
     clearAuthStorage()
     setCurrentUser({
