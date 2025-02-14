@@ -1,6 +1,13 @@
 class Api::V1::DraftsController < Api::V1::BaseController
   before_action :authenticate_user!
 
+  include Pagination
+
+  def index
+    drafts = current_user.drafts.order(created_at: :desc).page(params[:page] || 1).per(10)
+    render json: drafts, meta: pagination(drafts), adapter: :json
+  end
+
   def create
     draft = current_user.drafts.new(draft_params)
     if draft.save
