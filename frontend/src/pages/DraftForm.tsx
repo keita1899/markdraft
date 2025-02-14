@@ -21,7 +21,7 @@ import { fetcher } from '../utils'
 import { getAuthHeaders } from '../utils/getRequestHeaders'
 import { saveDraftValidation } from '../validations/saveDraftValidation'
 
-type DraftFormFata = {
+type DraftFormData = {
   title: string
   content: string
 }
@@ -51,11 +51,11 @@ const DraftForm = () => {
     reset,
     formState: { errors },
     watch,
-  } = useForm<DraftFormFata>({
+  } = useForm<DraftFormData>({
     defaultValues: data || { title: '', content: '' },
   })
 
-  const onSubmit = async (formData: DraftFormFata) => {
+  const onSubmit = async (formData: DraftFormData) => {
     setIsLoading(true)
     try {
       if (isEditMode) {
