@@ -32,6 +32,15 @@ class Api::V1::DraftsController < Api::V1::BaseController
     render json: draft
   end
 
+  def destroy
+    draft = find_draft
+    if draft.destroy
+      render json: { message: "下書きを削除しました" }, status: :ok
+    else
+      render json: { error: "下書きの削除に失敗しました" }, status: :internal_server_error
+    end
+  end
+
   private
 
     def find_draft
