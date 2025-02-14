@@ -4,4 +4,9 @@ export const API_ENDPOINTS = {
   signup: `${BASE_URL}/api/v1/auth`,
   signin: `${BASE_URL}/api/v1/auth/sign_in`,
   current_user: `${BASE_URL}/api/v1/current/user`,
+  drafts: {
+    create: `${BASE_URL}/api/v1/drafts`,
+    update: (id: string) => `${BASE_URL}/api/v1/drafts/${id}`,
+    show: (id: string) => `${BASE_URL}/api/v1/drafts/${id}`,
+  },
 }
