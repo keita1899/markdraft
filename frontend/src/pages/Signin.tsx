@@ -9,8 +9,9 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
-import { useAuth } from '../hooks/useAuth'
+import { useCurrentUserState } from '../hooks/useCurrentUser'
 import { saveAuthStorage } from '../utils/authStorage'
+import { getDefaultHeaders } from '../utils/getRequestHeaders'
 import { signinValidation } from '../validations/signinValidation'
 
 type SigninFormData = {
@@ -20,8 +21,8 @@ type SigninFormData = {
 
 const Signin = () => {
   const navigate = useNavigate()
+  const [currentUser, setCurrentUser] = useCurrentUserState()
   const { openSnackbar } = useSnackbar()
-  const { currentUser, setCurrentUser } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -38,26 +39,19 @@ const Signin = () => {
   const onSubmit: SubmitHandler<SigninFormData> = async (data) => {
     setIsLoading(true)
     const url = API_ENDPOINTS.signin
-    const headers = {
-      'Content-Type': 'application/json',
-    }
 
     axios({
       method: 'POST',
       url: url,
       data: data,
-      headers: headers,
+      headers: getDefaultHeaders,
     })
       .then((res: AxiosResponse) => {
-        const accessToken = res.headers['access-token']
-        const client = res.headers['client']
-        const uid = res.headers['uid']
-
-        if (!accessToken || !client || !uid) {
-          throw new Error('レスポンスに認証ヘッダーがありません')
-        }
-
-        saveAuthStorage(accessToken, client, uid)
+        saveAuthStorage(
+          res.headers['access-token'],
+          res.headers['client'],
+          res.headers['uid'],
+        )
         setCurrentUser({
           ...currentUser,
           isFetched: false,
