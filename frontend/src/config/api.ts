@@ -9,5 +9,6 @@ export const API_ENDPOINTS = {
     create: `${BASE_URL}/api/v1/drafts`,
     update: (id: string) => `${BASE_URL}/api/v1/drafts/${id}`,
     show: (id: string) => `${BASE_URL}/api/v1/drafts/${id}`,
+    destroy: (id: number) => `${BASE_URL}/api/v1/drafts/${id}`,
   },
 }
