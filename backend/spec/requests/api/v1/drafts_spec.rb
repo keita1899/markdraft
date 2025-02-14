@@ -130,4 +130,26 @@ RSpec.describe "Drafts", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let!(:draft) { create(:draft, user: user) }
+
+    context "ログインしている場合" do
+      it "下書きのデータが1件削除される" do
+        expect {
+          delete "/api/v1/drafts/#{draft.id}", headers: headers
+        }.to change { Draft.count }.by(-1)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("下書きを削除しました")
+      end
+    end
+
+    context "ログインしていない場合" do
+      it "401エラーが返る" do
+        delete "/api/v1/drafts/#{draft.id}"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
