@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './styles/index.css'
-import { AuthProvider } from './provider/AuthProvider'
+import CurrentUserFetch from './components/CurrentUserFetch'
 import { SnackbarProvider } from './provider/SnackbarProvider'
 import reportWebVitals from './reportWebVitals'
 import theme from './styles/theme'
@@ -16,12 +16,12 @@ root.render(
       <CssBaseline />
       <BrowserRouter>
         <SnackbarProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
+          <CurrentUserFetch />
+          <App />
         </SnackbarProvider>
       </BrowserRouter>
     </ThemeProvider>
+    ,
   </React.StrictMode>,
 )
 

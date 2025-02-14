@@ -1,27 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
-import { ReactNode, useEffect, useState } from 'react'
+import axios, { AxiosResponse, AxiosError } from 'axios'
+import { useEffect } from 'react'
 import { API_ENDPOINTS } from '../config/api'
-import { AuthContext } from '../context/AuthContext'
-import { clearAuthStorage } from '../utils/authStorage'
+import { useCurrentUserState } from '../hooks/useCurrentUser'
+// import { getAuthHeaders } from '../utils/getRequestHeaders'
 
-type AuthProviderProps = {
-  children: ReactNode
-}
-
-type CurrentUser = {
-  id: number
-  email: string
-  isSignedIn: boolean
-  isFetched: boolean
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>({
-    id: 0,
-    email: '',
-    isSignedIn: false,
-    isFetched: false,
-  })
+const CurrentUserFetch = () => {
+  const [currentUser, setCurrentUser] = useCurrentUserState()
 
   useEffect(() => {
     if (currentUser.isFetched) {
@@ -47,10 +31,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             isFetched: true,
           })
         })
-        .catch((e: AxiosError<{ error: string }>) => {
-          if (e.response?.status === 401) {
-            clearAuthStorage()
-          }
+        .catch((err: AxiosError<{ error: string }>) => {
+          console.log(err.message)
           setCurrentUser({
             ...currentUser,
             isFetched: true,
@@ -64,9 +46,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [currentUser, setCurrentUser])
 
-  return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <></>
 }
+
+export default CurrentUserFetch

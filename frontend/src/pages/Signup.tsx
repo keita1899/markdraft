@@ -9,7 +9,9 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
+import { useCurrentUserState } from '../hooks/useCurrentUser'
 import { saveAuthStorage } from '../utils/authStorage'
+import { getDefaultHeaders } from '../utils/getRequestHeaders'
 import { signupValidation } from '../validations/signupValidation'
 
 type SignupFormData = {
@@ -20,6 +22,7 @@ type SignupFormData = {
 
 const Signup = () => {
   const navigate = useNavigate()
+  const [currentUser, setCurrentUser] = useCurrentUserState()
   const { openSnackbar } = useSnackbar()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,9 +41,6 @@ const Signup = () => {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setIsLoading(true)
     const url = API_ENDPOINTS.signup
-    const headers = {
-      'Content-Type': 'application/json',
-    }
     const { confirmPassword, ...formData } = data
     const requestData = {
       registration: {
@@ -53,7 +53,7 @@ const Signup = () => {
       method: 'POST',
       url: url,
       data: requestData,
-      headers: headers,
+      headers: getDefaultHeaders,
     })
       .then((res: AxiosResponse) => {
         saveAuthStorage(
@@ -61,6 +61,10 @@ const Signup = () => {
           res.headers['client'],
           res.headers['uid'],
         )
+        setCurrentUser({
+          ...currentUser,
+          isFetched: false,
+        })
         openSnackbar('新規登録に成功しました', 'success')
         navigate('/drafts')
       })
