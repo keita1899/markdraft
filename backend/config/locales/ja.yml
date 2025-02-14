@@ -2,11 +2,15 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      draft: 下書き
     attributes:
       user:
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード確認用
+      draft:
+        title: タイトル
+        content: 本文
   errors:
     messages:
       invalid_email: 無効なメールアドレスです

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       namespace :current do
         resource :user, only: [:show]
       end
+
+      resources :drafts, only: [:create, :update, :show]
     end
   end
 end
