@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import DraftForm from '../pages/DraftForm'
+import DraftIndex from '../pages/DraftIndex'
 import Home from '../pages/Home'
 import InternalServerError from '../pages/InternalServerError'
 import NotFound from '../pages/NotFound'
@@ -14,6 +15,7 @@ const Router = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signout" element={<Signout />} />
+      <Route path="/drafts" element={<DraftIndex />} />
       <Route path="/drafts/new" element={<DraftForm />} />
       <Route path="/drafts/:id" element={<DraftForm />} />
       <Route path="/500" element={<InternalServerError />} />

@@ -2,10 +2,61 @@ require "rails_helper"
 
 RSpec.describe "Drafts", type: :request do
   let(:user) { create(:user) }
+  let(:draft) { create(:draft, user: user) }
   let(:headers) { user.create_new_auth_token }
-  let!(:draft) { create(:draft, user: user) }
   let(:valid_params) { { draft: { title: "Test Draft", content: "Test Content" } } }
   let(:invalid_params) { { draft: { title: "", content: "" } } }
+
+  describe "GET /index" do
+    let!(:drafts) { create_list(:draft, 25, user: user) }
+    let(:per_page) { 10 }
+    let(:total_pages) { (drafts.count / per_page.to_f).ceil }
+
+    context "ログインしている場合" do
+      context "ページが指定されていない場合" do
+        it "デフォルトで1ページ目の下書き一覧を取得する" do
+          get "/api/v1/drafts", headers: headers
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["drafts"]).to be_an_instance_of(Array)
+          expect(JSON.parse(response.body)["meta"]).to include(
+            "total_pages" => total_pages,
+            "current_page" => 1,
+          )
+        end
+      end
+
+      context "1ページ目の場合" do
+        it "1ページ目の下書き一覧を取得する" do
+          get "/api/v1/drafts/?page=1", headers: headers
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["drafts"]).to be_an_instance_of(Array)
+          expect(JSON.parse(response.body)["meta"]).to include(
+            "total_pages" => total_pages,
+            "current_page" => 1,
+          )
+        end
+      end
+
+      context "2ページ目の場合" do
+        it "2ページ目の下書き一覧を取得する" do
+          get "/api/v1/drafts/?page=2", headers: headers
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["drafts"]).to be_an_instance_of(Array)
+          expect(JSON.parse(response.body)["meta"]).to include(
+            "total_pages" => total_pages,
+            "current_page" => 2,
+          )
+        end
+      end
+    end
+
+    context "ログインしていない場合" do
+      it "401エラーが返る" do
+        get "/api/v1/drafts"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 
   describe "GET /show" do
     context "ログインしている場合" do

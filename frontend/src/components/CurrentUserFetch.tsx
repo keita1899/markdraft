@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios'
 import { useEffect } from 'react'
 import { API_ENDPOINTS } from '../config/api'
 import { useCurrentUserState } from '../hooks/useCurrentUser'
-// import { getAuthHeaders } from '../utils/getRequestHeaders'
+import { getAuthHeaders } from '../utils/getRequestHeaders'
 
 const CurrentUserFetch = () => {
   const [currentUser, setCurrentUser] = useCurrentUserState()
@@ -16,12 +16,7 @@ const CurrentUserFetch = () => {
       const url = API_ENDPOINTS.current_user
       axios
         .get(url, {
-          headers: {
-            'Content-Type': 'application/json',
-            'access-token': localStorage.getItem('access-token'),
-            client: localStorage.getItem('client'),
-            uid: localStorage.getItem('uid'),
-          },
+          headers: getAuthHeaders(),
         })
         .then((res: AxiosResponse) => {
           setCurrentUser({
