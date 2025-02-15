@@ -11,19 +11,30 @@ import {
   List,
   ListItem,
   ListItemText,
+  Menu,
+  MenuItem,
 } from '@mui/material'
-import { useState } from 'react'
+import { useState, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUserState } from '../../hooks/useCurrentUser'
 
 export const Header = () => {
   const [currentUser] = useCurrentUserState()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
+  }
+
+  const handleSettingsClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
   }
 
   return (
@@ -72,13 +83,40 @@ export const Header = () => {
                   </>
                 )}
                 {currentUser.isSignedIn && (
-                  <Typography
-                    component={Link}
-                    to="/signout"
-                    sx={{ cursor: 'pointer', color: 'inherit' }}
-                  >
-                    ログアウト
-                  </Typography>
+                  <>
+                    <Typography
+                      component={Link}
+                      to="/signout"
+                      sx={{ cursor: 'pointer', color: 'inherit' }}
+                    >
+                      ログアウト
+                    </Typography>
+                    <Typography
+                      sx={{
+                        marginLeft: 2,
+                        cursor: 'pointer',
+                        color: 'inherit',
+                      }}
+                      onClick={handleSettingsClick} // 設定をクリックでドロップダウン
+                    >
+                      設定
+                    </Typography>
+
+                    {/* 設定のドロップダウンメニュー */}
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      }}
+                    >
+                      <MenuItem component={Link} to="/password/edit">
+                        パスワード変更
+                      </MenuItem>
+                    </Menu>
+                  </>
                 )}
               </>
             )}
@@ -95,6 +133,12 @@ export const Header = () => {
                   <>
                     <ListItem component={Link} to="/signout">
                       <ListItemText primary="ログアウト" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText primary="設定" />
+                    </ListItem>
+                    <ListItem component={Link} to="/password/edit">
+                      <ListItemText primary="パスワード変更" />
                     </ListItem>
                   </>
                 ) : (
