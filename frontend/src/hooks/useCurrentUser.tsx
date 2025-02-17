@@ -6,6 +6,7 @@ export const useCurrentUserState = () => {
     email: string
     isSignedIn: boolean
     isFetched: boolean
+    isDeleted: boolean
   }
 
   const fallbackData: currentUserStateType = {
@@ -13,6 +14,7 @@ export const useCurrentUserState = () => {
     email: '',
     isSignedIn: false,
     isFetched: false,
+    isDeleted: false,
   }
 
   const { data: state, mutate: setState } = useSWR('user', null, {
