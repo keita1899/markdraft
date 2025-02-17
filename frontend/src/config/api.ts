@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
   signup: `${BASE_URL}/api/v1/auth`,
   signin: `${BASE_URL}/api/v1/auth/sign_in`,
   change_password: `${BASE_URL}/api/v1/auth/password`,
+  delete_account: `${BASE_URL}/api/v1/auth`,
   current_user: `${BASE_URL}/api/v1/current/user`,
   drafts: {
     index: (page?: string) => `${BASE_URL}/api/v1/drafts/?page=${page}`,
