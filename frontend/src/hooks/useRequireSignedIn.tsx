@@ -9,7 +9,11 @@ export const useRequireSignedIn = () => {
   const { openSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (currentUser.isFetched && !currentUser.isSignedIn) {
+    if (
+      currentUser.isFetched &&
+      !currentUser.isSignedIn &&
+      !currentUser.isDeleted
+    ) {
       openSnackbar('ログインが必要です', 'error')
       navigate('/signin')
     }
