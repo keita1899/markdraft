@@ -13,6 +13,7 @@ const Signout = () => {
       email: '',
       isSignedIn: false,
       isFetched: true,
+      isDeleted: false,
     })
     navigate('/signin')
   }, [navigate, setCurrentUser])

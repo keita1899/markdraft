@@ -9,6 +9,7 @@ import { SubmitButton } from '../components/form/SubmitButton'
 import { TextAlignContainer } from '../components/utilities/TextAlignContainer'
 import { API_ENDPOINTS } from '../config/api'
 import { useSnackbar } from '../context/SnackbarContext'
+import { useRequireSignedIn } from '../hooks/useRequireSignedIn'
 import { getAuthHeaders } from '../utils/getRequestHeaders'
 import { ChangePasswordValidation } from '../validations/changePasswordValidation'
 
@@ -19,6 +20,7 @@ type ChangePasswordFormData = {
 }
 
 const ChangePasswordForm = () => {
+  useRequireSignedIn()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const { openSnackbar } = useSnackbar()

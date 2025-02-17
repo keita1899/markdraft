@@ -97,12 +97,11 @@ export const Header = () => {
                         cursor: 'pointer',
                         color: 'inherit',
                       }}
-                      onClick={handleSettingsClick} // 設定をクリックでドロップダウン
+                      onClick={handleSettingsClick}
                     >
                       設定
                     </Typography>
 
-                    {/* 設定のドロップダウンメニュー */}
                     <Menu
                       anchorEl={anchorEl}
                       open={Boolean(anchorEl)}
@@ -114,6 +113,9 @@ export const Header = () => {
                     >
                       <MenuItem component={Link} to="/password/edit">
                         パスワード変更
+                      </MenuItem>
+                      <MenuItem component={Link} to="/account/delete">
+                        アカウント削除
                       </MenuItem>
                     </Menu>
                   </>
@@ -139,6 +141,9 @@ export const Header = () => {
                     </ListItem>
                     <ListItem component={Link} to="/password/edit">
                       <ListItemText primary="パスワード変更" />
+                    </ListItem>
+                    <ListItem component={Link} to="/account/delete">
+                      <ListItemText primary="アカウント削除" />
                     </ListItem>
                   </>
                 ) : (
