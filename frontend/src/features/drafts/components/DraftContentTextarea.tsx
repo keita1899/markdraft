@@ -35,6 +35,7 @@ export const DraftContentTextarea = <T extends FieldValues>({
           variant="outlined"
           fullWidth
           multiline
+          minRows={50}
           error={!!error}
           helperText={error?.message}
         />
