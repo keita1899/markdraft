@@ -1,4 +1,3 @@
-import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
   Toolbar,
@@ -17,6 +16,7 @@ import {
 import { useState, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUserState } from '../../hooks/useCurrentUser'
+import { MenuIcon } from '../icons'
 
 export const Header = () => {
   const [currentUser] = useCurrentUserState()
@@ -86,8 +86,19 @@ export const Header = () => {
                   <>
                     <Typography
                       component={Link}
-                      to="/signout"
+                      to="/drafts"
                       sx={{ cursor: 'pointer', color: 'inherit' }}
+                    >
+                      下書き一覧
+                    </Typography>
+                    <Typography
+                      component={Link}
+                      to="/signout"
+                      sx={{
+                        marginLeft: 2,
+                        cursor: 'pointer',
+                        color: 'inherit',
+                      }}
                     >
                       ログアウト
                     </Typography>
@@ -133,6 +144,9 @@ export const Header = () => {
               <>
                 {currentUser.isSignedIn ? (
                   <>
+                    <ListItem component={Link} to="/drafts">
+                      <ListItemText primary="下書き一覧" />
+                    </ListItem>
                     <ListItem component={Link} to="/signout">
                       <ListItemText primary="ログアウト" />
                     </ListItem>
